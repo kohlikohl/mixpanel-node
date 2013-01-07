@@ -11,13 +11,16 @@
   },
   "repository": {
       "type": "git",
-      "url": "http://github.com/carlsverre/mixpanel-node.git"
+      "url": "http://github.com/kohlikohl/mixpanel-node.git"
   },
   "engines": {
     "node": ">=0.6.0"
   },
   "scripts": {
     "test": "bin/run_tests"
+  },
+  "dependencies": {
+      "iz": "0.0.3"
   },
   "devDependencies": {
     "nodeunit": "0.7",
