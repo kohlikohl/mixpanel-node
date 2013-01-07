@@ -5,6 +5,7 @@ exports.people = {
     setUp: function(next) {
         this.token = 'token';
         this.mixpanel = Mixpanel.init(this.token);
+        this.ip = '127.0.0.1';
 
         Sinon.stub(this.mixpanel, 'send_request');
 
@@ -47,6 +48,81 @@ exports.people = {
                 };
 
             this.mixpanel.people.set(this.distinct_id, prop);
+
+            test.ok(
+                this.mixpanel.send_request.calledWithMatch(this.endpoint, expected_data),
+                "people.set didn't call send_request with correct arguments"
+            );
+
+            test.done();
+        },
+
+        "supports sending of ip address to mixpanel": function(test) {
+            var prop = { key1: 'val1', key2: 'val2' },
+                expected_data = {
+                    $set: prop,
+                    $token: this.token,
+                    $distinct_id: this.distinct_id,
+                    $ip: this.ip
+                };
+
+            this.mixpanel.people.set(this.distinct_id, prop, this.ip);
+
+            test.ok(
+                this.mixpanel.send_request.calledWithMatch(this.endpoint, expected_data),
+                "people.set didn't call send_request with correct arguments"
+            );
+
+            test.done();
+        },
+
+        "supports sending without ip address to mixpanel with callback": function(test) {
+            var prop = { key1: 'val1', key2: 'val2' },
+                expected_data = {
+                    $set: prop,
+                    $token: this.token,
+                    $distinct_id: this.distinct_id
+                };
+
+            this.mixpanel.people.set(this.distinct_id, prop, function(){});
+
+            test.ok(
+                this.mixpanel.send_request.calledWithMatch(this.endpoint, expected_data),
+                "people.set didn't call send_request with correct arguments"
+            );
+
+            test.done();
+        },
+
+        "supports sending of ip address to mixpanel with callback": function(test) {
+            var prop = { key1: 'val1', key2: 'val2' },
+                expected_data = {
+                    $set: prop,
+                    $token: this.token,
+                    $distinct_id: this.distinct_id,
+                    $ip: this.ip
+                };
+
+            this.mixpanel.people.set(this.distinct_id, prop, this.ip, function(){});
+
+            test.ok(
+                this.mixpanel.send_request.calledWithMatch(this.endpoint, expected_data),
+                "people.set didn't call send_request with correct arguments"
+            );
+
+            test.done();
+        },
+        "supports sending of ip address to mixpanel with callback, single prop": function(test) {
+            var expected_data = {
+                    $set: {
+                        key1: 'val1'
+                    },
+                    $token: this.token,
+                    $distinct_id: this.distinct_id,
+                    $ip: this.ip
+                };
+
+            this.mixpanel.people.set(this.distinct_id, 'key1', 'val1', this.ip, function(){});
 
             test.ok(
                 this.mixpanel.send_request.calledWithMatch(this.endpoint, expected_data),

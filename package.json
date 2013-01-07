@@ -19,6 +19,9 @@
   "scripts": {
     "test": "bin/run_tests"
   },
+  "dependencies": {
+      "iz": "0.0.3"
+  },
   "devDependencies": {
     "nodeunit": "0.7",
     "sinon": "1.4"
